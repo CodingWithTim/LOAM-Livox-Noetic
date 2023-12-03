@@ -290,8 +290,8 @@ void BuildOptimizationProblem( const VectorOfConstraints &constraints,
     }
 
     ceres::LossFunction *         loss_function = NULL;
-    ceres::LocalParameterization *quaternion_local_parameterization =
-        new ceres::EigenQuaternionParameterization;
+    ceres::Manifold *quaternion_local_parameterization =
+        new ceres::EigenQuaternionManifold;
 
     for ( VectorOfConstraints::const_iterator constraints_iter =
               constraints.begin();
@@ -314,9 +314,9 @@ void BuildOptimizationProblem( const VectorOfConstraints &constraints,
                                    pose_end_iter->second.p.data(),
                                    pose_end_iter->second.q.coeffs().data() );
 
-        problem->SetParameterization( pose_begin_iter->second.q.coeffs().data(),
+        problem->SetManifold( pose_begin_iter->second.q.coeffs().data(),
                                       quaternion_local_parameterization );
-        problem->SetParameterization( pose_end_iter->second.q.coeffs().data(),
+        problem->SetManifold( pose_end_iter->second.q.coeffs().data(),
                                       quaternion_local_parameterization );
     }
 
